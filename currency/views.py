@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from django.apps import apps
 
 from .serializers import RUBCurrencySerializer, EURCurrencySerializer, USDCurrencySerializer
+from .models import RUBCurrency
+from .helpers import sum_digits
 
 
 class CurrencyView(APIView):
@@ -49,3 +51,23 @@ class CurrencyView(APIView):
         elif currency == 'USD':
             return USDCurrencySerializer
 
+
+class WithdrawView(APIView):
+
+    def post(self, request):
+        currency = request.POST.get('currency', None)
+        amount = request.POST.get('amount', None)
+        if request.POST.get is None or amount is None:
+            return Response(data={"success": False})
+        model_name = currency.upper() + 'Currency'
+        model = apps.get_model('currency', model_name)
+        qs = model.objects.order_by('-value').all()
+        dict_digits = sum_digits(qs, int(amount))
+        if dict_digits is None:
+            return Response(data={"success": False})
+        data = dict()
+        data['success'] = True
+        data['result']  = list()
+        for key in dict_digits:
+            data['result'].append({'value': key, 'quantity': dict_digits[key]})
+        return Response(data=data)
