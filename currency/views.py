@@ -1,11 +1,9 @@
 
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.apps import apps
 
 from .serializers import RUBCurrencySerializer, EURCurrencySerializer, USDCurrencySerializer
-from .models import RUBCurrency
 from .helpers import sum_digits
 
 
@@ -67,7 +65,7 @@ class WithdrawView(APIView):
             return Response(data={"success": False})
         data = dict()
         data['success'] = True
-        data['result']  = list()
+        data['result'] = list()
         for key in dict_digits:
             data['result'].append({'value': key, 'quantity': dict_digits[key]})
         return Response(data=data)
