@@ -16,3 +16,5 @@ readme_my
 app/secret_settings\.py
 
 /venv
+
+/postgres-data

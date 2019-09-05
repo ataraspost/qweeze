@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import EURCurrency, RUBCurrency, USDCurrency
+
+admin.site.register(EURCurrency)
+admin.site.register(RUBCurrency)
+admin.site.register(USDCurrency)
+
