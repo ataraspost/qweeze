@@ -1,0 +1,1 @@
+start app: sudo docker-compose up
